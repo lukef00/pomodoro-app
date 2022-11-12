@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Pomodoro</string>
+
+    <string name="pomodoro_session">Session no.</string>
+    <string name="pomodoro_pomodoro">Pomodoro no.</string>
+    <string name="pomodoro_start_button">Start</string>
+
+<!--    notification channel-->
+    <string name="channel_name">pomodoro_channel</string>
+    <string name="channel_description">Here we\'ll show notifications about pomodoro sessions</string>
 </resources>
