@@ -1,4 +1,4 @@
-package com.example.pomodoro;
+package com.example.pomodoro.ui.timer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -13,7 +13,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
+
+import com.example.pomodoro.R;
+
+public class TimerFragment extends Fragment {
+
     private final String CHANNEL_ID = "9000";
     private final int NOFITICATION_ID = 1;
 
@@ -32,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView pomodoro_TextView;
     private TextView timer_TextView;
 
+    private TimerViewModel mViewModel;
+
+
     private void createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -42,26 +55,26 @@ public class MainActivity extends AppCompatActivity {
         channel.setDescription(description);
         // Register the channel with the system; you can't change the importance
         // or other notification behaviors after this
-        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
 
-    private void getElements() {
-        this.pomodoro_startButton = findViewById(R.id.button_pomodoro_start);
-        this.pomodoro_TextView = findViewById(R.id.pomodoro_num);
-        this.timer_TextView = findViewById(R.id.timer);
+    private void getElements(View view) {
+        this.pomodoro_startButton = view.findViewById(R.id.button_pomodoro_start);
+        this.pomodoro_TextView = view.findViewById(R.id.pomodoro_num);
+        this.timer_TextView = view.findViewById(R.id.timer);
         this.pomodoro_TextView.setText(String.format("%d out of 4", POMODORO_COUNT));
     }
 
     private void displayNotification() {
-        this.builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        this.builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.tomato)
                 .setContentText(timer_TextView.getText())
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        this.notificationManager = NotificationManagerCompat.from(this);
+        this.notificationManager = NotificationManagerCompat.from(getActivity());
         this.notificationManager.notify(NOFITICATION_ID, builder.build());
     }
 
@@ -119,12 +132,24 @@ public class MainActivity extends AppCompatActivity {
         }.start();
     }
 
+    public static TimerFragment newInstance() {
+        return new TimerFragment();
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_timer, container, false);
+        getElements(view);
+
+        return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         createNotificationChannel();
-        getElements();
 
         pomodoro_startButton.setOnClickListener(v -> {
             // first of all we have to hide start button and show notification
@@ -132,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
             displayNotification();
             startPomodoro();
         });
-
-
     }
+
 }

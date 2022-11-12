@@ -5,7 +5,21 @@
     <string name="pomodoro_pomodoro">Pomodoro no.</string>
     <string name="pomodoro_start_button">Start</string>
 
-<!--    notification channel-->
+    <!--    notification channel-->
     <string name="channel_name">pomodoro_channel</string>
     <string name="channel_description">Here we\'ll show notifications about pomodoro sessions</string>
+
+<!--    navigation-->
+    <string name="title_activity_navigation">NavigationActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Pomodoro</string>
+    <string name="nav_header_subtitle">Łukasz Flisak</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_timer">Timer</string>
+    <string name="menu_tasks">Tasks</string>
+    <string name="menu_flashcards">Flashcards</string>
 </resources>
