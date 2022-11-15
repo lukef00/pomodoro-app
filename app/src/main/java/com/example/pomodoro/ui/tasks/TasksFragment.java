@@ -1,7 +1,5 @@
 package com.example.pomodoro.ui.tasks;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,27 +10,36 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.pomodoro.R;
+import com.example.pomodoro.databinding.FragmentTasksBinding;
+import com.example.pomodoro.structures.Task;
+import com.example.pomodoro.structures.TaskAdapter;
+
+import java.io.FileInputStream;
+import java.util.ArrayList;
 
 public class TasksFragment extends Fragment {
 
-    private TasksViewModel mViewModel;
-
-    public static TasksFragment newInstance() {
-        return new TasksFragment();
-    }
+    FragmentTasksBinding tb;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tasks, container, false);
+        tb = FragmentTasksBinding.inflate(getLayoutInflater());
+        View view = tb.getRoot();
+        //here data must be an instance of the class MarsDataProvider
+        // load tasks from internal storage
+
+        TaskAdapter ta = new TaskAdapter(getContext());
+        tb.taskList.setAdapter(ta);
+
+        ArrayList<Task> tasks = Task.getTasks();
+
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(TasksViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

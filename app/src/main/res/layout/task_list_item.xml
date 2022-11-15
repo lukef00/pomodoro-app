@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal|fill_horizontal"
+    android:orientation="horizontal"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="10dp">
+
+    <LinearLayout
+        android:layout_width="325dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/task_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:text="math"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_1"
+                android:layout_width="22dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                app:srcCompat="@drawable/tomato" />
+
+            <ImageView
+                android:id="@+id/image_2"
+                android:layout_width="22dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/tomato" />
+
+            <ImageView
+                android:id="@+id/image_3"
+                android:layout_width="22dp"
+                android:layout_height="17dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/tomato" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/moveIcon"
+        android:layout_width="57dp"
+        android:layout_height="26dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_weight="1"
+        app:srcCompat="@drawable/move" />
+
+</LinearLayout>

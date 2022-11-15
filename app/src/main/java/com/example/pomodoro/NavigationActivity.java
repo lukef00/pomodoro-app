@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
+import com.example.pomodoro.structures.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
@@ -16,6 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pomodoro.databinding.ActivityNavigationBinding;
 
+import java.io.FileInputStream;
+import java.util.ArrayList;
+
 public class NavigationActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -24,6 +28,13 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try {
+            FileInputStream fos = openFileInput("tasks.json");
+            Task.deserialize(fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         binding = ActivityNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

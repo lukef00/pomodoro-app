@@ -13,15 +13,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
-public class Task {
+public class Task implements Comparable<Task>{
     private String title;
     private String description;
     private int priority;
     private boolean finished;
 
-    private static List<Task> tasks = new ArrayList<>();
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
     public Task(String title, int priority) {
         this.title = title;
@@ -67,7 +67,7 @@ public class Task {
 
     public static void deserialize(InputStream in) throws IOException {
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-        List<Task> nl = null;
+        ArrayList<Task> nl = null;
 
         try {
             nl = parseTasks(reader);
@@ -76,13 +76,19 @@ public class Task {
             reader.close();
             Task.tasks = nl;
         }
+        Task.sortTasks();
     }
-    private static List<Task> parseTasks(JsonReader reader) throws IOException {
-        List<Task> tasks = new ArrayList<Task>();
+
+    private static void sortTasks() {
+        Collections.sort(Task.tasks);
+    }
+
+
+    private static ArrayList<Task> parseTasks(JsonReader reader) throws IOException {
+        ArrayList<Task> tasks = new ArrayList<Task>();
 
         reader.beginArray();
         while (reader.hasNext()) {
-            System.out.println("Dodaje nowe zadanie");
             tasks.add(parseTask(reader));
         }
         reader.endArray();
@@ -114,8 +120,8 @@ public class Task {
         return new Task(title, description, priority, finished);
     }
 
-    public static List<Task> getTasks() { return Task.tasks; }
-    public static void addTask(Task t) { Task.tasks.add(t); }
+    public static ArrayList<Task> getTasks() { return Task.tasks; }
+    public static void addTask(Task t) { Task.tasks.add(t); Task.sortTasks();}
     public static void removeTask(Task t) { Task.tasks.remove(t); }
 
     public String getTitle() {
@@ -143,7 +149,17 @@ public class Task {
         this.finished = finished;
     }
     public String toString() {
-        return String.format("Task(\ntitle: %s\ndescription: %s\npriority: %d\nfinished: %b",
+        return String.format("Task(title: %s, description: %s, priority: %d, finished: %b)",
                 getTitle(), getDescription(), getPriority(), isFinished());
+    }
+
+    @Override
+    public int compareTo(Task task) {
+        // by priority
+        int priority_compare = task.getPriority() - this.getPriority();
+        if (priority_compare != 0) return priority_compare;
+
+        // alphabetically
+        return this.getTitle().compareTo(task.getTitle());
     }
 }

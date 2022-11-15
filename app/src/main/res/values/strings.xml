@@ -9,7 +9,7 @@
     <string name="channel_name">pomodoro_channel</string>
     <string name="channel_description">Here we\'ll show notifications about pomodoro sessions</string>
 
-<!--    navigation-->
+    <!--    navigation-->
     <string name="title_activity_navigation">NavigationActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
