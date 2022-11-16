@@ -1,13 +1,13 @@
 package com.example.pomodoro;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Menu;
 
 import com.example.pomodoro.structures.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -18,12 +18,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pomodoro.databinding.ActivityNavigationBinding;
 
 import java.io.FileInputStream;
-import java.util.ArrayList;
+import java.io.FileOutputStream;
 
 public class NavigationActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityNavigationBinding binding;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        try {
+            FileOutputStream fos = openFileOutput("tasks.json", Context.MODE_PRIVATE);
+            Task.serialize(fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public void onBackPressed() {
+
+        FragmentManager oChildFragmentManager = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_navigation).getChildFragmentManager();
+        if(oChildFragmentManager.getBackStackEntryCount() > 1){
+            oChildFragmentManager.popBackStack();
+            return;
+        }
+
+        super.onBackPressed();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +85,14 @@ public class NavigationActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+
+        FragmentManager oChildFragmentManager = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_navigation).getChildFragmentManager();
+        if(oChildFragmentManager.getBackStackEntryCount() > 1){
+            oChildFragmentManager.popBackStack();
+            return true;
+        }
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_navigation);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+        return NavigationUI.navigateUp(navController, mAppBarConfiguration) || super.onSupportNavigateUp();
     }
 }
