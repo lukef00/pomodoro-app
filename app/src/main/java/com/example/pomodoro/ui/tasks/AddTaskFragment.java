@@ -88,7 +88,7 @@ public class AddTaskFragment extends Fragment implements AdapterView.OnItemSelec
                 t = new Task(title, priority);
             } else t = new Task(title, description, priority);
             Task.addTask(t);
-            System.out.println("Dodaje zadanie usera");
+            getParentFragmentManager().popBackStack();
         }
 
     }

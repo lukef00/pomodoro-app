@@ -121,8 +121,13 @@ public class Task implements Comparable<Task>{
     }
 
     public static ArrayList<Task> getTasks() { return Task.tasks; }
+    public static Task getTask(int pos) { return Task.tasks.get(pos); }
     public static void addTask(Task t) { Task.tasks.add(t); Task.sortTasks();}
-    public static void removeTask(Task t) { Task.tasks.remove(t); }
+    public static void removeTask(int pos) { Task.tasks.remove(pos); Task.sortTasks(); }
+    public static void setStatus(boolean newStatus, int taskPos) {
+        Task.tasks.get(taskPos).setFinished(newStatus); Task.sortTasks();
+    }
+    public static boolean getStatus(int taskPos) { return Task.tasks.get(taskPos).isFinished();}
 
     public String getTitle() {
         return title;
@@ -155,6 +160,11 @@ public class Task implements Comparable<Task>{
 
     @Override
     public int compareTo(Task task) {
+        // by status
+        int mine = isFinished() ? 1 : 0;
+        int their = task.isFinished() ? 1: 0;
+        int status_compare = mine - their;
+        if (status_compare != 0) return status_compare;
         // by priority
         int priority_compare = task.getPriority() - this.getPriority();
         if (priority_compare != 0) return priority_compare;

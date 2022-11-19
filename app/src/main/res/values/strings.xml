@@ -45,4 +45,9 @@
         <item>Urgent</item>
     </string-array>
 
+    <!--  task bottom navigation-->
+    <string name="remove_task_label">Delete task</string>
+    <string name="mark_task_label">Mark task as complete</string>
+    <string name="unmark_task_label">Mark task as unfinished</string>
+    <string name="edit_task_label">Edit task</string>
 </resources>

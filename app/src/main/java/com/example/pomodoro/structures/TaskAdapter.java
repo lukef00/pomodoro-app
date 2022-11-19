@@ -1,11 +1,13 @@
 package com.example.pomodoro.structures;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.pomodoro.R;
@@ -17,31 +19,19 @@ public class TaskAdapter extends ArrayAdapter<Task> {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        Task t = getItem(position);
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.task_list_item, parent, false);
         }
 
-        int priority = t.getPriority();
-
+        Task t = getItem(position);
         TextView label = convertView.findViewById(R.id.task_title);
-        ImageView img2 = convertView.findViewById(R.id.image_2);
-        ImageView img3 = convertView.findViewById(R.id.image_3);
+        RatingBar rbar = convertView.findViewById(R.id.ratingBar);
 
-        if (priority == 0) {
-            img2.setAlpha(0.5F);
-            img3.setAlpha(0.5F);
-        }
-        else if (priority == 1) {
-            img3.setAlpha(0.5F);
-        }
-        else {
-            img2.setAlpha(1.0F);
-            img3.setAlpha(1.0F);
-        }
+        if (t.isFinished()) label.setPaintFlags(label.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        else label.setPaintFlags(label.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
 
+        rbar.setRating(t.getPriority() + 1);
         label.setText(t.getTitle());
-
         return convertView;
     }
 }
