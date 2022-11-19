@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.pomodoro.R;
 import com.example.pomodoro.databinding.FragmentTasksBinding;
@@ -32,18 +33,34 @@ public class TasksFragment extends Fragment {
     FragmentTasksBinding tb;
     FloatingActionButton fab;
     TaskAdapter ta;
+    ImageView image;
+    TextView text;
+
     int selected_item;
     boolean selected_status;
+
+    private void updateUI() {
+        if (ta.getCount() == 0) {
+            image.setAlpha(.7F);
+            text.setAlpha(.8F);
+        } else {
+            image.setAlpha(0.0F);
+            text.setAlpha(0.0F);
+        }
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         tb = FragmentTasksBinding.inflate(getLayoutInflater());
         View view = tb.getRoot();
+        image = view.findViewById(R.id.imageView3);
+        text = view.findViewById(R.id.emptyListLabel);
         ta = new TaskAdapter(getContext());
         tb.taskList.setAdapter(ta);
 
         ListView lv = view.findViewById(R.id.task_list);
+        updateUI();
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -70,6 +87,7 @@ public class TasksFragment extends Fragment {
                     Task.removeTask(selected_item);
                     d.dismiss();
                     ta.notifyDataSetChanged();
+                    updateUI();
                 });
 
                 d.findViewById(R.id.mcLL).setOnClickListener((v) -> {

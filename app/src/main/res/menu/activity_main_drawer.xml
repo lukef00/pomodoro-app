@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_timer"
-            android:icon="@drawable/alarm"
+            android:icon="@drawable/ic_baseline_alarm_24"
             android:title="@string/menu_timer" />
         <item
             android:id="@+id/nav_tasks"
