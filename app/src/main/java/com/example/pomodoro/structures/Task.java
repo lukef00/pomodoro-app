@@ -71,10 +71,12 @@ public class Task implements Comparable<Task>{
 
         try {
             nl = parseTasks(reader);
-        } catch (EOFException e) {}
+        } catch (EOFException e) {
+            e.printStackTrace();
+        }
         finally {
             reader.close();
-            Task.tasks = nl;
+            Task.tasks = nl == null ? new ArrayList<Task>() : nl;
         }
         Task.sortTasks();
     }
