@@ -25,8 +25,16 @@ public class TaskAdapter extends ArrayAdapter<Task> {
         TextView label = convertView.findViewById(R.id.task_title);
         RatingBar rbar = convertView.findViewById(R.id.ratingBar);
 
-        if (t.isFinished()) label.setPaintFlags(label.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        else label.setPaintFlags(label.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        if (t.isFinished()) {
+            int color = convertView.getResources().getColor(R.color.color11);
+            label.setPaintFlags(label.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            label.setTextColor(color);
+        }
+        else {
+            int color = convertView.getResources().getColor(R.color.color0);
+            label.setPaintFlags(label.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+            label.setTextColor(color);
+        }
 
         rbar.setRating(t.getPriority() + 1);
         label.setText(t.getTitle());

@@ -107,6 +107,16 @@ public class TasksFragment extends Fragment {
         });
 
         ArrayList<Task> tasks = Task.getTasks();
+        final int[] num = {0};
+        tasks.forEach((task -> num[0] += task.isFinished() ? 0: 1));
+        if (num[0] > 0) {
+            Toast.makeText(
+                getContext(),
+                String.format("%d %s left to go",  num[0], num[0] == 1 ? "task" : "tasks"),
+                Toast.LENGTH_LONG
+            ).show();
+
+        }
         fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
