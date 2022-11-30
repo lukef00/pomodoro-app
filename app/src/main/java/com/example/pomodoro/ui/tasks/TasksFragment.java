@@ -23,7 +23,7 @@ import android.widget.Toast;
 import com.example.pomodoro.R;
 import com.example.pomodoro.databinding.FragmentTasksBinding;
 import com.example.pomodoro.structures.Task;
-import com.example.pomodoro.structures.TaskAdapter;
+import com.example.pomodoro.adapters.TaskAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -62,48 +62,45 @@ public class TasksFragment extends Fragment {
         ListView lv = view.findViewById(R.id.task_list);
         updateUI();
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                selected_item = i;
+        lv.setOnItemClickListener((adapterView, view1, i, l) -> {
+            selected_item = i;
 
-                final Dialog d = new Dialog(getActivity());
-                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                d.setContentView(R.layout.bottom_nav);
-                TextView ts = d.findViewById(R.id.task_status);
-                ImageView sv = d.findViewById(R.id.task_status_img);
+            final Dialog d = new Dialog(getActivity());
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setContentView(R.layout.bottom_nav);
+            TextView ts = d.findViewById(R.id.task_status);
+            ImageView sv = d.findViewById(R.id.task_status_img);
 
-                selected_status = Task.getStatus(selected_item);
-                if (selected_status) {
-                    ts.setText(R.string.unmark_task_label);
-                    sv.setImageResource(R.drawable.ic_baseline_remove_done_24);
-                }
-                else {
-                    ts.setText(R.string.mark_task_label);
-                    sv.setImageResource(R.drawable.ic_baseline_done_24);
-                }
-
-                d.findViewById(R.id.removeLL).setOnClickListener((v) -> {
-                    Task.removeTask(selected_item);
-                    d.dismiss();
-                    ta.notifyDataSetChanged();
-                    updateUI();
-                });
-
-                d.findViewById(R.id.mcLL).setOnClickListener((v) -> {
-                    selected_status = !selected_status;
-                    Task.setStatus(selected_status, selected_item);
-                    d.dismiss();
-                    ta.notifyDataSetChanged();
-
-                });
-
-                d.show();
-                d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                d.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-                d.getWindow().setGravity(Gravity.BOTTOM);
+            selected_status = Task.getStatus(selected_item);
+            if (selected_status) {
+                ts.setText(R.string.unmark_task_label);
+                sv.setImageResource(R.drawable.ic_baseline_remove_done_24);
             }
+            else {
+                ts.setText(R.string.mark_task_label);
+                sv.setImageResource(R.drawable.ic_baseline_done_24);
+            }
+
+            d.findViewById(R.id.removeLL).setOnClickListener((v) -> {
+                Task.removeTask(selected_item);
+                d.dismiss();
+                ta.notifyDataSetChanged();
+                updateUI();
+            });
+
+            d.findViewById(R.id.mcLL).setOnClickListener((v) -> {
+                selected_status = !selected_status;
+                Task.setStatus(selected_status, selected_item);
+                d.dismiss();
+                ta.notifyDataSetChanged();
+
+            });
+
+            d.show();
+            d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            d.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            d.getWindow().setGravity(Gravity.BOTTOM);
         });
 
         ArrayList<Task> tasks = Task.getTasks();
@@ -118,12 +115,9 @@ public class TasksFragment extends Fragment {
 
         }
         fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddTaskFragment atf = new AddTaskFragment();
-                getParentFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_navigation, atf).addToBackStack(atf.toString()).commit();
-            }
+        fab.setOnClickListener(view12 -> {
+            AddTaskFragment atf = new AddTaskFragment();
+            getParentFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_navigation, atf).addToBackStack(atf.toString()).commit();
         });
 
         return view;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 
+import com.example.pomodoro.structures.Flashcard;
 import com.example.pomodoro.structures.Task;
 import com.google.android.material.navigation.NavigationView;
 
@@ -19,18 +20,20 @@ import com.example.pomodoro.databinding.ActivityNavigationBinding;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Objects;
 
 public class NavigationActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    private ActivityNavigationBinding binding;
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         try {
             FileOutputStream fos = openFileOutput("tasks.json", Context.MODE_PRIVATE);
+            FileOutputStream fos2 = openFileOutput("flashcards.json", Context.MODE_PRIVATE);
             Task.serialize(fos);
+            Flashcard.serialize(fos2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +41,7 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        FragmentManager oChildFragmentManager = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_navigation).getChildFragmentManager();
+        FragmentManager oChildFragmentManager = Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_navigation)).getChildFragmentManager();
         if(oChildFragmentManager.getBackStackEntryCount() > 1){
             oChildFragmentManager.popBackStack();
             return;
@@ -53,12 +56,14 @@ public class NavigationActivity extends AppCompatActivity {
 
         try {
             FileInputStream fos = openFileInput("tasks.json");
+            FileInputStream fos2= openFileInput("flashcards.json");
             Task.deserialize(fos);
+            Flashcard.deserialize(fos2);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        binding = ActivityNavigationBinding.inflate(getLayoutInflater());
+        com.example.pomodoro.databinding.ActivityNavigationBinding binding = ActivityNavigationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarNavigation.toolbar);
@@ -86,7 +91,7 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
 
-        FragmentManager oChildFragmentManager = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_navigation).getChildFragmentManager();
+        FragmentManager oChildFragmentManager = Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_navigation)).getChildFragmentManager();
         if(oChildFragmentManager.getBackStackEntryCount() > 1){
             oChildFragmentManager.popBackStack();
             return true;

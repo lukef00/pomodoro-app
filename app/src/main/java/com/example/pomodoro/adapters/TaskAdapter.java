@@ -1,4 +1,4 @@
-package com.example.pomodoro.structures;
+package com.example.pomodoro.adapters;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -10,6 +10,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.pomodoro.R;
+import com.example.pomodoro.structures.Task;
 
 public class TaskAdapter extends ArrayAdapter<Task> {
     public TaskAdapter(Context context) {

@@ -1,0 +1,27 @@
+{
+  "ungrouped": [
+    {
+      "title": "Czym jest model MVC?",
+      "answer": "...",
+      "correctAnswers": 10,
+      "totalAnswers": 15,
+      "lastAnswer": "2022-12-30 11:00"
+    },
+    {
+      "title": "Jaka jest rola kontrolera?",
+      "answer": "...",
+      "correctAnswers": 10,
+      "totalAnswers": 15,
+      "lastAnswer": "2022-12-30 11:00"
+    }
+  ],
+  "rails": [
+    {
+      "title": "Czym jest Ruby on Rails",
+      "answer": "...",
+      "correctAnswers": 5,
+      "totalAnswers": 3,
+      "lastAnswer": "2022-11-10 11:00"
+    }
+  ]
+}

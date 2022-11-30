@@ -98,7 +98,7 @@ public class TimerFragment extends Fragment {
         pomodoro_TextView.setText(String.format("%d out of 4", POMODORO_COUNT));
         builder.setContentTitle("Session going on");
 
-        System.out.printf("Pomodoro: %d%n", POMODORO_COUNT);
+
 
         new CountDownTimer(POMODORO_LENGTH, 1000) {
             public void onTick(long millisUntilFinished) {

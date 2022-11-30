@@ -2,6 +2,7 @@ package com.example.pomodoro.ui.tasks;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 
 import com.example.pomodoro.R;
 import com.example.pomodoro.databinding.FragmentAddTaskBinding;
-import com.example.pomodoro.databinding.FragmentTasksBinding;
 import com.example.pomodoro.structures.Task;
 
 
@@ -42,26 +42,18 @@ public class AddTaskFragment extends Fragment implements AdapterView.OnItemSelec
         // Required empty public constructor
     }
 
-    public static AddTaskFragment newInstance() {
-        AddTaskFragment fragment = new AddTaskFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentAddTaskBinding tb = FragmentAddTaskBinding.inflate(getLayoutInflater());
         View view = tb.getRoot();
-        Spinner spinner = (Spinner) view.findViewById(R.id.priority_spinner);
+        Spinner spinner = view.findViewById(R.id.priority_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.priority_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
@@ -69,9 +61,7 @@ public class AddTaskFragment extends Fragment implements AdapterView.OnItemSelec
         title_input = view.findViewById(R.id.add_task_title);
         description_input = view.findViewById(R.id.add_task_description);
 
-        view.findViewById(R.id.add_task_btn).setOnClickListener((v) -> {
-            createTask();
-        });
+        view.findViewById(R.id.add_task_btn).setOnClickListener((v) -> createTask());
         return view;
     }
 
