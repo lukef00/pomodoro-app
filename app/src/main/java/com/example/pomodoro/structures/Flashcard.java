@@ -96,6 +96,22 @@ public class Flashcard {
         return temp;
     }
 
+    public static void addGroup(String groupName) {
+        Flashcard.flashcards.put(groupName, new ArrayList<>());
+    }
+    public static void removeGroup(String groupName) {
+        Flashcard.flashcards.remove(groupName);
+    }
+
+    public void addFlashcard(Flashcard newFlash) {
+        String group = newFlash.getGroup();
+        Flashcard.flashcards.computeIfAbsent(group, k -> new ArrayList<>()).add(newFlash);
+    }
+
+    public static ArrayList<Flashcard> getFlashcardsFromGroup(String groupName) {
+        return flashcards.get(groupName);
+    }
+
 //    public static ArrayList<Flashcard> getFlashcards() { return Flashcard.getFlashcards(); }
 //    public static Flashcard getFlashcard(int pos) { return Flashcard.flashcards.get(pos); }
 //    public static void addFlashcard(Flashcard t) { Flashcard.flashcards.add(t);}

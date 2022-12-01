@@ -1,27 +1,19 @@
 {
-  "ungrouped": [
+  "ungrouped": [],
+  "programowanie linowe": [
     {
-      "title": "Czym jest model MVC?",
-      "answer": "...",
-      "correctAnswers": 10,
-      "totalAnswers": 15,
-      "lastAnswer": "2022-12-30 11:00"
+      "title": "Opisz algorytm węgierski",
+      "answer": "Metoda węgierska – algorytm pozwalający rozwiązać problem przypisania w czasie wielomianowym. Została ona dopracowana oraz opublikowana przez Harolda Kuhna w roku 1955. Została ona nazwana „metodą węgierską” z uwagi na fakt, że została ona wyprowadzona na podstawie wcześniejszych prac dwóch węgierskich matematyków: Dénesa Kőniga i Jenő Egerváry'ego.W roku 1957 profesor matematyki James Raymond Munkres zauważył, że algorytm węgierski jest silnie wielomianowy. Od tamtej pory metoda węgierska jest również znana jako algorytm Kuhna-Munkersa. Metoda węgierska – algorytm pozwalający rozwiązać problem przypisania w czasie wielomianowym. Została ona dopracowana oraz opublikowana przez Harolda Kuhna w roku 1955. Została ona nazwana „metodą węgierską” z uwagi na fakt, że została ona wyprowadzona na podstawie wcześniejszych prac dwóch węgierskich matematyków: Dénesa Kőniga i Jenő Egerváry'ego.W roku 1957 profesor matematyki James Raymond Munkres zauważył, że algorytm węgierski jest silnie wielomianowy. Od tamtej pory metoda węgierska jest również znana jako algorytm Kuhna-Munkersa.",
+      "correctAnswers": 0,
+      "totalAnswers": 0,
+      "lastAnswer": "2022-12-01T12:00"
     },
     {
-      "title": "Jaka jest rola kontrolera?",
-      "answer": "...",
-      "correctAnswers": 10,
-      "totalAnswers": 15,
-      "lastAnswer": "2022-12-30 11:00"
-    }
-  ],
-  "rails": [
-    {
-      "title": "Czym jest Ruby on Rails",
-      "answer": "...",
-      "correctAnswers": 5,
-      "totalAnswers": 3,
-      "lastAnswer": "2022-11-10 11:00"
+      "title": "Na czym polega zagadnienie transportowe",
+      "answer": "Zagadnienie sprowadza się do wyliczenia optymalnego sposobu dostarczania dóbr.",
+      "correctAnswers": 0,
+      "totalAnswers": 0,
+      "lastAnswer": "2022-12-01T12:00"
     }
   ]
 }
