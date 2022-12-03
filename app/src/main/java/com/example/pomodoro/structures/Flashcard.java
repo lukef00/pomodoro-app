@@ -36,7 +36,7 @@ public class Flashcard {
         this.totalAnswers = 0;
         this.correctAnswers = 0;
         this.group = "ungrouped";
-        this.lastAnswer = null;
+        this.lastAnswer = LocalDateTime.now();
     }
     public Flashcard(String group, String title, String answer) {
         this(title, answer);
@@ -103,9 +103,13 @@ public class Flashcard {
         Flashcard.flashcards.remove(groupName);
     }
 
-    public void addFlashcard(Flashcard newFlash) {
+    public static void addFlashcard(Flashcard newFlash) {
         String group = newFlash.getGroup();
         Flashcard.flashcards.computeIfAbsent(group, k -> new ArrayList<>()).add(newFlash);
+    }
+
+    public static void removeFlashcard(Flashcard f) {
+        Flashcard.flashcards.computeIfAbsent(f.getGroup(), k -> new ArrayList<>()).remove(f);
     }
 
     public static ArrayList<Flashcard> getFlashcardsFromGroup(String groupName) {

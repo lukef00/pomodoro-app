@@ -22,6 +22,7 @@ import com.example.pomodoro.R;
 import com.example.pomodoro.adapters.GroupAdapter;
 import com.example.pomodoro.structures.Flashcard;
 import com.example.pomodoro.structures.FlashcardGroup;
+import com.example.pomodoro.ui.tasks.AddTaskFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FlashcardsFragment extends Fragment {
@@ -56,6 +57,7 @@ public class FlashcardsFragment extends Fragment {
                 }
             });
         }
+
 
         AlertDialog dialog = builder.create();
         dialog.show();
@@ -110,6 +112,13 @@ public class FlashcardsFragment extends Fragment {
             new_flashcard.setVisibility(View.INVISIBLE);
             new_group.setVisibility(View.INVISIBLE);
             displayDialog(R.layout.new_group_dialog, true);
+        });
+
+        new_flashcard.setOnClickListener(v -> {
+            new_flashcard.setVisibility(View.INVISIBLE);
+            new_group.setVisibility(View.INVISIBLE);
+            AddFlashcardFragment atf = new AddFlashcardFragment();
+            getParentFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_navigation, atf).addToBackStack(atf.toString()).commit();
         });
 
         gv.setAdapter(ga);

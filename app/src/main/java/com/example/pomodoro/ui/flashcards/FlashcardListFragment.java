@@ -54,6 +54,14 @@ public class FlashcardListFragment extends Fragment {
             dialog.show();
         });
 
+        lv.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            Flashcard f =fa.getItem(i);
+            fa.remove(f);
+            Flashcard.removeFlashcard(f);
+            fa.notifyDataSetChanged();
+            return true;
+        });
+
         lv.setAdapter(fa);
     }
 }

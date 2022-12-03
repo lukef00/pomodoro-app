@@ -42,6 +42,12 @@
         <item>Urgent</item>
     </string-array>
 
+    <!-- add new fragment -->
+    <string name="flashcard_title_label">Question/title</string>
+    <string name="flashcard_answer_label">Correct answer</string>
+    <string name="flashcard_spinner_label">Group</string>
+    <string name="flashcard_submit_btn">Add new flashcard</string>
+
     <!--  task bottom navigation-->
     <string name="remove_task_label">Delete task</string>
     <string name="mark_task_label">Mark task as complete</string>
