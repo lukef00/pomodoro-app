@@ -21,7 +21,6 @@ public class FlashcardAdapter extends ArrayAdapter<Flashcard> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.flashcard_list_item, parent, false);
         }
-        Flashcard
         Flashcard t = getItem(position);
         TextView label = convertView.findViewById(R.id.flashcard_title);
         label.setText(t.getTitle());

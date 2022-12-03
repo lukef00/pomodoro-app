@@ -50,6 +50,7 @@ public class FlashcardsFragment extends Fragment {
 
                     if (text.length() > 0) {
                         ga.add(new FlashcardGroup(text, 0));
+                        Flashcard.addGroup(text);
                         ga.notifyDataSetChanged();
                     }
                 }
