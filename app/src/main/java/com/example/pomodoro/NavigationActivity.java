@@ -20,6 +20,7 @@ import com.example.pomodoro.databinding.ActivityNavigationBinding;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 public class NavigationActivity extends AppCompatActivity {
@@ -29,14 +30,6 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try {
-            FileOutputStream fos = openFileOutput("tasks.json", Context.MODE_PRIVATE);
-            FileOutputStream fos2 = openFileOutput("flashcards.json", Context.MODE_PRIVATE);
-            Task.serialize(fos);
-            Flashcard.serialize(fos2);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
     @Override
     public void onBackPressed() {
@@ -54,12 +47,13 @@ public class NavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Task.setContext(this);
+        Flashcard.setContext(this);
+
         try {
-            FileInputStream fos = openFileInput("tasks.json");
-            FileInputStream fos2= openFileInput("flashcards.json");
-            Task.deserialize(fos);
-            Flashcard.deserialize(fos2);
-        } catch (Exception e) {
+            Flashcard.deserialize();
+            Task.deserialize();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

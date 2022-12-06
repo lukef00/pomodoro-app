@@ -1,5 +1,6 @@
 package com.example.pomodoro.structures;
 
+import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
@@ -7,6 +8,7 @@ import android.util.JsonWriter;
 import androidx.annotation.NonNull;
 
 import java.io.EOFException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,7 +23,12 @@ public class Task implements Comparable<Task>{
     private int priority;
     private boolean finished;
 
+    private static String OUTPUT_FILE = "tasks.json";
+    private static Context con;
     private static ArrayList<Task> tasks = new ArrayList<>();
+
+    public static void setContext(Context c) {Task.con = c;}
+
 
     public Task(String title, int priority) {
         this.title = title;
@@ -40,7 +47,8 @@ public class Task implements Comparable<Task>{
         this.priority = priority;
     }
 
-    public static void serialize(OutputStream fos) throws IOException {
+    public static void serialize() throws IOException {
+        FileOutputStream fos = con.openFileOutput(OUTPUT_FILE, Context.MODE_PRIVATE);
         JsonWriter writer = new JsonWriter(new OutputStreamWriter(fos, "UTF-8"));
         writer.setIndent("  ");
         writer.beginArray();
@@ -65,7 +73,8 @@ public class Task implements Comparable<Task>{
         writer.endObject();
     }
 
-    public static void deserialize(InputStream in) throws IOException {
+    public static void deserialize() throws IOException {
+        InputStream in = con.openFileInput(OUTPUT_FILE);
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         ArrayList<Task> nl = null;
 
@@ -124,10 +133,27 @@ public class Task implements Comparable<Task>{
 
     public static ArrayList<Task> getTasks() { return Task.tasks; }
     public static Task getTask(int pos) { return Task.tasks.get(pos); }
-    public static void addTask(Task t) { Task.tasks.add(t); Task.sortTasks();}
-    public static void removeTask(int pos) { Task.tasks.remove(pos); Task.sortTasks(); }
+    public static void addTask(Task t) { Task.tasks.add(t); Task.sortTasks();
+        try {
+            Task.serialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void removeTask(int pos) { Task.tasks.remove(pos); Task.sortTasks();
+        try {
+            Task.serialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static void setStatus(boolean newStatus, int taskPos) {
         Task.tasks.get(taskPos).setFinished(newStatus); Task.sortTasks();
+        try {
+            Task.serialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public static boolean getStatus(int taskPos) { return Task.tasks.get(taskPos).isFinished();}
 

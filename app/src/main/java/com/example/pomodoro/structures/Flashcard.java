@@ -1,5 +1,6 @@
 package com.example.pomodoro.structures;
 
+import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.JsonWriter;
@@ -7,6 +8,7 @@ import android.util.JsonWriter;
 import androidx.annotation.NonNull;
 
 import java.io.EOFException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,8 +29,12 @@ public class Flashcard {
     int correctAnswers;
     LocalDateTime lastAnswer;
 
+    private static Context con;
+    private static String OUTPUT_FILE = "flashcards.json";
+
     private static HashMap<String, ArrayList<Flashcard>> flashcards = new HashMap<>();
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static void setContext(Context c) {Flashcard.con = c;}
 
     public Flashcard(String title, String answer) {
         this.title = title;
@@ -98,31 +104,46 @@ public class Flashcard {
 
     public static void addGroup(String groupName) {
         Flashcard.flashcards.put(groupName, new ArrayList<>());
+        try {
+            Flashcard.serialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public static void removeGroup(String groupName) {
         Flashcard.flashcards.remove(groupName);
+        try {
+            Flashcard.serialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void addFlashcard(Flashcard newFlash) {
         String group = newFlash.getGroup();
         Flashcard.flashcards.computeIfAbsent(group, k -> new ArrayList<>()).add(newFlash);
+        try {
+            Flashcard.serialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void removeFlashcard(Flashcard f) {
         Flashcard.flashcards.computeIfAbsent(f.getGroup(), k -> new ArrayList<>()).remove(f);
+        try {
+            Flashcard.serialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ArrayList<Flashcard> getFlashcardsFromGroup(String groupName) {
         return flashcards.get(groupName);
     }
 
-//    public static ArrayList<Flashcard> getFlashcards() { return Flashcard.getFlashcards(); }
-//    public static Flashcard getFlashcard(int pos) { return Flashcard.flashcards.get(pos); }
-//    public static void addFlashcard(Flashcard t) { Flashcard.flashcards.add(t);}
-//    public static void removeFlashcard(int pos) { Flashcard.flashcards.remove(pos);}
-
-    // loading data from file into static ArrayList
-    public static void deserialize(InputStream in) throws IOException {
+    public static void deserialize() throws IOException {
+        InputStream in = con.openFileInput(OUTPUT_FILE);
         JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
         HashMap<String, ArrayList<Flashcard>> nl = new HashMap<>();
 
@@ -191,7 +212,8 @@ public class Flashcard {
     }
 
     // saving data from static ArrayList to json file on device
-    public static void serialize(OutputStream fos) throws IOException {
+    public static void serialize() throws IOException {
+        FileOutputStream fos = con.openFileOutput(OUTPUT_FILE, Context.MODE_PRIVATE);
         JsonWriter writer = new JsonWriter(new OutputStreamWriter(fos, "UTF-8"));
         writer.setIndent("  ");
         writer.beginObject();
