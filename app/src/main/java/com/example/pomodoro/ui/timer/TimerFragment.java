@@ -1,11 +1,7 @@
 package com.example.pomodoro.ui.timer;
 
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import android.annotation.SuppressLint;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -23,9 +19,6 @@ import com.example.pomodoro.R;
 
 public class TimerFragment extends Fragment {
 
-    private final String CHANNEL_ID = "9000";
-    private final int NOTIFICATION_ID = 1;
-
     private final int POMODORO_LENGTH = 25 * 60 * 1000;
     private final int SHORT_BREAK_LENGTH = 5 * 60 * 1000;
     private final int LONG_BREAK_LENGTH = 25 * 60 * 1000;
@@ -34,29 +27,12 @@ public class TimerFragment extends Fragment {
     private boolean POMODORO_RUNNING = false;
 
     // notification and CountDownTimer
-    private NotificationManagerCompat notificationManager;
-    private NotificationCompat.Builder builder;
 
     // UI elements
     private Button pomodoro_startButton;
     private TextView pomodoro_TextView;
     private TextView timer_TextView;
 
-
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        CharSequence name = getString(R.string.channel_name);
-        String description = getString(R.string.channel_description);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(description);
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this
-        NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
-        notificationManager.createNotificationChannel(channel);
-    }
 
     @SuppressLint("DefaultLocale")
     private void getElements(View view) {
@@ -66,18 +42,6 @@ public class TimerFragment extends Fragment {
         this.pomodoro_TextView.setText(String.format("%d out of 4", POMODORO_COUNT));
     }
 
-    private void displayNotification() {
-        this.builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID)
-                .setSmallIcon(R.drawable.tomato)
-                .setContentText(timer_TextView.getText())
-                .setOngoing(true)
-                .setOnlyAlertOnce(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-
-        this.notificationManager = NotificationManagerCompat.from(getActivity());
-        this.notificationManager.notify(NOTIFICATION_ID, builder.build());
-    }
-
     private void updateWidgets(long milliseconds) {
         if (milliseconds > 0) {
             int seconds_left = (int) (milliseconds / 1000);
@@ -85,20 +49,15 @@ public class TimerFragment extends Fragment {
             seconds_left = seconds_left % 60;
 
             @SuppressLint("DefaultLocale") String formatted_data = String.format("%02d:%02d", minutes_left, seconds_left);
-            builder.setContentText(formatted_data);
             timer_TextView.setText(formatted_data);
         }
 
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
     @SuppressLint("DefaultLocale")
     private void startPomodoro() {
         POMODORO_COUNT++;
         pomodoro_TextView.setText(String.format("%d out of 4", POMODORO_COUNT));
-        builder.setContentTitle("Session going on");
-
-
 
         new CountDownTimer(POMODORO_LENGTH, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -113,7 +72,6 @@ public class TimerFragment extends Fragment {
     }
 
     private void startBreak(boolean longBreak) {
-        builder.setContentTitle("Session going on");
 
         new CountDownTimer(longBreak ? LONG_BREAK_LENGTH : SHORT_BREAK_LENGTH, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -124,7 +82,6 @@ public class TimerFragment extends Fragment {
                 if (POMODORO_COUNT <= 3) startPomodoro();
                 else {
                     // TODO add some indication that session has ended, congratulate user
-                    builder.setContentTitle("Congratulations, you finished this session");
                     pomodoro_startButton.setVisibility(View.VISIBLE);
                     POMODORO_COUNT = 0;
                     POMODORO_RUNNING = false;
@@ -146,15 +103,12 @@ public class TimerFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        createNotificationChannel();
-
         if (POMODORO_RUNNING) pomodoro_startButton.setVisibility(View.INVISIBLE);
 
         pomodoro_startButton.setOnClickListener(v -> {
             // first of all we have to hide start button and show notification
             POMODORO_RUNNING = true;
             pomodoro_startButton.setVisibility(View.INVISIBLE);
-            displayNotification();
             startPomodoro();
         });
     }

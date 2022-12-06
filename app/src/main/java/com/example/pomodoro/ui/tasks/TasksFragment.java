@@ -1,6 +1,8 @@
 package com.example.pomodoro.ui.tasks;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.pomodoro.R;
 import com.example.pomodoro.databinding.FragmentTasksBinding;
+import com.example.pomodoro.structures.Flashcard;
 import com.example.pomodoro.structures.Task;
 import com.example.pomodoro.adapters.TaskAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,8 +53,7 @@ public class TasksFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         tb = FragmentTasksBinding.inflate(getLayoutInflater());
         View view = tb.getRoot();
         image = view.findViewById(R.id.imageView3);
@@ -63,6 +65,18 @@ public class TasksFragment extends Fragment {
         updateUI();
 
         lv.setOnItemClickListener((adapterView, view1, i, l) -> {
+            Task f = ta.getItem(i);
+            if (f.getDescription() != null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage(f.getDescription()).setTitle(f.getTitle());
+                builder.setPositiveButton(R.string.close, (dialog, id) -> dialog.dismiss());
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
+        lv.setOnItemLongClickListener((adapterView, view1, i, l) -> {
             selected_item = i;
 
             final Dialog d = new Dialog(getActivity());
@@ -75,8 +89,7 @@ public class TasksFragment extends Fragment {
             if (selected_status) {
                 ts.setText(R.string.unmark_task_label);
                 sv.setImageResource(R.drawable.ic_baseline_remove_done_24);
-            }
-            else {
+            } else {
                 ts.setText(R.string.mark_task_label);
                 sv.setImageResource(R.drawable.ic_baseline_done_24);
             }
@@ -101,17 +114,14 @@ public class TasksFragment extends Fragment {
             d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             d.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
             d.getWindow().setGravity(Gravity.BOTTOM);
+            return true;
         });
 
         ArrayList<Task> tasks = Task.getTasks();
         final int[] num = {0};
-        tasks.forEach((task -> num[0] += task.isFinished() ? 0: 1));
+        tasks.forEach((task -> num[0] += task.isFinished() ? 0 : 1));
         if (num[0] > 0) {
-            Toast.makeText(
-                getContext(),
-                String.format("%d %s left to go",  num[0], num[0] == 1 ? "task" : "tasks"),
-                Toast.LENGTH_LONG
-            ).show();
+            Toast.makeText(getContext(), String.format("%d %s left to go", num[0], num[0] == 1 ? "task" : "tasks"), Toast.LENGTH_LONG).show();
 
         }
         fab = view.findViewById(R.id.fab);

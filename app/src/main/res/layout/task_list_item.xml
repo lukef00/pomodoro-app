@@ -11,7 +11,7 @@
     android:paddingVertical="10dp">
 
     <LinearLayout
-        android:layout_width="325dp"
+        android:layout_width="269dp"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -34,5 +34,14 @@
             android:stepSize="1" />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/task_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:baselineAlignBottom="false"
+        app:srcCompat="@drawable/ic_baseline_notes_24" />
+
 
 </LinearLayout>

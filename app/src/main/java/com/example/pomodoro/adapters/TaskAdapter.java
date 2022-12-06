@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.task_list_item, parent, false);
         }
 
+        ImageView im = convertView.findViewById(R.id.task_img);
         Task t = getItem(position);
         TextView label = convertView.findViewById(R.id.task_title);
         RatingBar rbar = convertView.findViewById(R.id.ratingBar);
@@ -36,6 +38,11 @@ public class TaskAdapter extends ArrayAdapter<Task> {
             label.setPaintFlags(label.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             label.setTextColor(color);
         }
+
+        if (t.getDescription() != null) {
+            im.setVisibility(View.VISIBLE);
+        }
+        else im.setVisibility(View.INVISIBLE);
 
         rbar.setRating(t.getPriority() + 1);
         label.setText(t.getTitle());

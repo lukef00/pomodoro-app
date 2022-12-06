@@ -60,4 +60,6 @@
 
     <string name="add_group">Add new group</string>
     <string name="add_flashcard">Add new flashcard</string>
+
+    <string name="new_group_label">Group name</string>
 </resources>
