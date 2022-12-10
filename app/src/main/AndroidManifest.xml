@@ -13,6 +13,7 @@
         android:theme="@style/Theme.Pomodoro"
         tools:targetApi="26">
         <activity
+            android:screenOrientation="portrait"
             android:name=".NavigationActivity"
             android:exported="true"
             android:theme="@style/Theme.Pomodoro.NoActionBar">

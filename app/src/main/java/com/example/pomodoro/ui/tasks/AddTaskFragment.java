@@ -14,28 +14,36 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.pomodoro.R;
+import com.example.pomodoro.adapters.TaskAdapter;
 import com.example.pomodoro.databinding.FragmentAddTaskBinding;
 import com.example.pomodoro.structures.Task;
+
+import java.io.IOException;
 
 
 public class AddTaskFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
+    Task temp = null;
+    TaskAdapter adapter;
     String title;
     String description;
     int priority;
+
+
+    public AddTaskFragment(Task t, TaskAdapter adap) {
+        temp = t;
+        adapter = adap;
+    }
 
     TextView title_input;
     TextView description_input;
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
         priority = pos;
     }
 
     public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
     }
 
     public AddTaskFragment() {
@@ -61,6 +69,12 @@ public class AddTaskFragment extends Fragment implements AdapterView.OnItemSelec
         title_input = view.findViewById(R.id.add_task_title);
         description_input = view.findViewById(R.id.add_task_description);
 
+        if (temp != null) {
+            title_input.setText(this.temp.getTitle());
+            description_input.setText(this.temp.getDescription());
+            spinner.setSelection(this.temp.getPriority());
+        }
+
         view.findViewById(R.id.add_task_btn).setOnClickListener((v) -> createTask());
         return view;
     }
@@ -73,11 +87,27 @@ public class AddTaskFragment extends Fragment implements AdapterView.OnItemSelec
         if (title.length() > 0) {
             Task t;
 
-            if (description.length() == 0) {
-                description = null;
-                t = new Task(title, priority);
-            } else t = new Task(title, description, priority);
-            Task.addTask(t);
+            if (temp != null) {
+                temp.setTitle(title);
+                if (description.length() > 0) temp.setDescription(description);
+                temp.setPriority(priority);
+                try {
+                    Task.serialize();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Task.sortTasks();
+                adapter.notifyDataSetChanged();
+            } else {
+                if (description.length() == 0) {
+                    description = null;
+
+                    t = new Task(title, priority);
+                } else t = new Task(title, description, priority);
+                Task.addTask(t);
+            }
+
+
             getParentFragmentManager().popBackStack();
         }
 

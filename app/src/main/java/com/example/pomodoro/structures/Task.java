@@ -90,7 +90,7 @@ public class Task implements Comparable<Task>{
         Task.sortTasks();
     }
 
-    private static void sortTasks() {
+    public static void sortTasks() {
         Collections.sort(Task.tasks);
     }
 

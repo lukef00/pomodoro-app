@@ -2,7 +2,6 @@ package com.example.pomodoro.ui.tasks;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.pomodoro.R;
 import com.example.pomodoro.databinding.FragmentTasksBinding;
-import com.example.pomodoro.structures.Flashcard;
 import com.example.pomodoro.structures.Task;
 import com.example.pomodoro.adapters.TaskAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -81,7 +78,7 @@ public class TasksFragment extends Fragment {
 
             final Dialog d = new Dialog(getActivity());
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            d.setContentView(R.layout.bottom_nav);
+            d.setContentView(R.layout.task_bottom_dialog);
             TextView ts = d.findViewById(R.id.task_status);
             ImageView sv = d.findViewById(R.id.task_status_img);
 
@@ -99,6 +96,14 @@ public class TasksFragment extends Fragment {
                 d.dismiss();
                 ta.notifyDataSetChanged();
                 updateUI();
+            });
+
+            d.findViewById(R.id.editLL).setOnClickListener((v) -> {
+                Task t = ta.getItem(i);
+                d.dismiss();
+
+                AddTaskFragment atf = new AddTaskFragment(t, ta);
+                getParentFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_navigation, atf).addToBackStack(atf.toString()).commit();
             });
 
             d.findViewById(R.id.mcLL).setOnClickListener((v) -> {
