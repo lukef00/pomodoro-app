@@ -49,6 +49,14 @@
     <string name="unmark_task_label">Mark task as unfinished</string>
     <string name="edit_task_label">Edit task</string>
 
+    <!-- group bottom navigation -->
+    <string name="remove_group_label">Remove group</string>
+    <string name="rename_group_label">Change group name</string>
+
+    <!-- flashcard bottom navigation -->
+    <string name="remove_flashcard_label">Remove flashcard</string>
+    <string name="edit_flashcard_label">Edit flashcard</string>
+
     <string name="close">close</string>
     <string name="cancel">cancel</string>
     <string name="add">add</string>

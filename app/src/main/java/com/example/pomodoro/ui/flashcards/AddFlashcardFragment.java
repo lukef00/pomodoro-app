@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.pomodoro.R;
+import com.example.pomodoro.adapters.FlashcardAdapter;
 import com.example.pomodoro.structures.Flashcard;
 import com.example.pomodoro.structures.FlashcardGroup;
 
@@ -22,6 +23,9 @@ import java.util.ArrayList;
 
 public class AddFlashcardFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     ArrayList<String> group_names = new ArrayList<>();
+
+    Flashcard temp;
+    FlashcardAdapter fa;
 
     String selected_group;
     String title;
@@ -35,6 +39,11 @@ public class AddFlashcardFragment extends Fragment implements AdapterView.OnItem
 
     public AddFlashcardFragment() {
         // Required empty public constructor
+    }
+
+    public AddFlashcardFragment(Flashcard f, FlashcardAdapter fa) {
+        temp = f;
+        this.fa = fa;
     }
 
     @Override
@@ -72,10 +81,20 @@ public class AddFlashcardFragment extends Fragment implements AdapterView.OnItem
             title = String.valueOf(flashcard_title_field.getText()).trim();
             answer = String.valueOf(flashcard_answer_field.getText()).trim();
 
-            if (title.length() > 0 && answer.length() > 0) {
-                Flashcard nf = new Flashcard(selected_group, title, answer);
-                Flashcard.addFlashcard(nf);
-                getParentFragmentManager().popBackStack();
+            if (temp != null) {
+                if (title.length() > 0 && answer.length() > 0) {
+                    temp.setAnswer(answer);
+                    temp.setTitle(title);
+                    fa.notifyDataSetChanged();
+                    getParentFragmentManager().popBackStack();
+                }
+            } else {
+
+                if (title.length() > 0 && answer.length() > 0) {
+                    Flashcard nf = new Flashcard(selected_group, title, answer);
+                    Flashcard.addFlashcard(nf);
+                    getParentFragmentManager().popBackStack();
+                }
             }
 
         });

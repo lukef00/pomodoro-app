@@ -110,6 +110,16 @@ public class Flashcard {
             e.printStackTrace();
         }
     }
+
+    public static void renameGroup(String group, String newName) {
+        ArrayList<Flashcard> fg = Flashcard.flashcards.remove(group);
+        fg.forEach(f -> {
+            f.setGroup(newName);
+            Flashcard.addFlashcard(f);
+        });
+        flashcards.put(newName, fg);
+    }
+
     public static void removeGroup(String groupName) {
         Flashcard.flashcards.remove(groupName);
         try {
@@ -128,6 +138,7 @@ public class Flashcard {
             e.printStackTrace();
         }
     }
+
 
     public static void removeFlashcard(Flashcard f) {
         Flashcard.flashcards.computeIfAbsent(f.getGroup(), k -> new ArrayList<>()).remove(f);

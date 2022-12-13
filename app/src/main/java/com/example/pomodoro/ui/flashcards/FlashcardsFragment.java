@@ -2,27 +2,29 @@ package com.example.pomodoro.ui.flashcards;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.example.pomodoro.R;
 import com.example.pomodoro.adapters.GroupAdapter;
 import com.example.pomodoro.structures.Flashcard;
 import com.example.pomodoro.structures.FlashcardGroup;
-import com.example.pomodoro.ui.tasks.AddTaskFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FlashcardsFragment extends Fragment {
@@ -31,7 +33,7 @@ public class FlashcardsFragment extends Fragment {
     Button new_flashcard;
     GridView gv;
 
-    private void displayDialog(int layoutFile, boolean isGroup) {
+    private void displayDialog(int layoutFile, boolean isGroup, FlashcardGroup fg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(layoutFile);
 
@@ -50,8 +52,15 @@ public class FlashcardsFragment extends Fragment {
                     text = text.trim();
 
                     if (text.length() > 0) {
-                        ga.add(new FlashcardGroup(text, 0));
-                        Flashcard.addGroup(text);
+                        if (fg != null) {
+                            Flashcard.renameGroup(fg.getName(), text);
+                            ga.notifyDataSetChanged();
+                            gv.setAdapter(ga);
+                        }
+                        else {
+                            ga.add(new FlashcardGroup(text, 0));
+                            Flashcard.addGroup(text);
+                        }
                         ga.notifyDataSetChanged();
                     }
                 }
@@ -80,14 +89,33 @@ public class FlashcardsFragment extends Fragment {
         new_group = a.findViewById(R.id.button);
         new_flashcard = a.findViewById(R.id.button2);
 
-        gv.setOnItemLongClickListener(((adapterView, view, i, l) -> {
-            FlashcardGroup fg =ga.getItem(i);
-            Flashcard.removeGroup(fg.getName());
-            ga.remove(fg);
-            ga.notifyDataSetChanged();
+        gv.setOnItemLongClickListener((adapterView, view1, i, l) -> {
+            Dialog d = new Dialog(getActivity());
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setContentView(R.layout.group_bottom_dialog);
+
+            d.findViewById(R.id.gEditLL).setOnClickListener((v) -> {
+                displayDialog(R.layout.new_group_dialog, true, ga.getItem(i));
+                d.dismiss();
+            });
+
+            d.findViewById(R.id.gRemoveLL).setOnClickListener((v) -> {
+                FlashcardGroup fg = ga.getItem(i);
+                Flashcard.removeGroup(fg.getName());
+                d.dismiss();
+                ga.remove(fg);
+                ga.notifyDataSetChanged();
+            });
+
+            d.show();
+            d.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            d.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            d.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            d.getWindow().setGravity(Gravity.BOTTOM);
             return true;
-        }
-        ));
+        });
+
+
         gv.setOnItemClickListener((adapterView, view, i, l) -> {
 
             FlashcardListFragment atf = new FlashcardListFragment(ga.getItem(i).getName());
@@ -111,7 +139,7 @@ public class FlashcardsFragment extends Fragment {
         new_group.setOnClickListener(v -> {
             new_flashcard.setVisibility(View.INVISIBLE);
             new_group.setVisibility(View.INVISIBLE);
-            displayDialog(R.layout.new_group_dialog, true);
+            displayDialog(R.layout.new_group_dialog, true, null);
         });
 
         new_flashcard.setOnClickListener(v -> {

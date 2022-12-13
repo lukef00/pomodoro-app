@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,22 +19,23 @@ import android.view.ViewGroup;
 
 import com.example.pomodoro.R;
 
+import java.io.IOException;
+
 public class TimerFragment extends Fragment {
 
     private final int POMODORO_LENGTH = 25 * 60 * 1000;
     private final int SHORT_BREAK_LENGTH = 5 * 60 * 1000;
-    private final int LONG_BREAK_LENGTH = 30 * 60 * 1000;
+    private final int LONG_BREAK_LENGTH = 25 * 60 * 1000;
 
     private int POMODORO_COUNT = 0;
     private boolean POMODORO_RUNNING = false;
-    private static MediaPlayer mp;
-
-    // notification and CountDownTimer
+    private static MediaPlayer player;
 
     // UI elements
     private Button pomodoro_startButton;
     private TextView pomodoro_TextView;
     private TextView timer_TextView;
+    private ImageView image;
 
 
     @SuppressLint("DefaultLocale")
@@ -41,6 +43,7 @@ public class TimerFragment extends Fragment {
         this.pomodoro_startButton = view.findViewById(R.id.button_pomodoro_start);
         this.pomodoro_TextView = view.findViewById(R.id.pomodoro_num);
         this.timer_TextView = view.findViewById(R.id.timer);
+        this.image = view.findViewById(R.id.imageView);
         this.pomodoro_TextView.setText(String.format("%d out of 4", POMODORO_COUNT));
     }
 
@@ -53,10 +56,20 @@ public class TimerFragment extends Fragment {
             timer_TextView.setText(formatted_data);
     }
 
+    private void changePlayerTrack(int track) {
+        if (player != null) {
+            player.release();
+        }
+        player = MediaPlayer.create(getContext(), track);
+        player.start();
+    }
+
     @SuppressLint("DefaultLocale")
     private void startPomodoro() {
         POMODORO_COUNT++;
+        image.setImageResource(R.drawable.tomato);
         pomodoro_TextView.setText(String.format("%d out of 4", POMODORO_COUNT));
+        changePlayerTrack(R.raw.lofi);
 
         new CountDownTimer(POMODORO_LENGTH, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -65,7 +78,8 @@ public class TimerFragment extends Fragment {
 
             @Override
             public void onFinish() {
-                        mp.start();
+                image.setImageResource(R.drawable.break_img);
+                changePlayerTrack(POMODORO_COUNT >= 4 ? R.raw.pike : R.raw.familiar);
                 startBreak(POMODORO_COUNT >= 4);
             }
         }.start();
@@ -82,10 +96,10 @@ public class TimerFragment extends Fragment {
             public void onFinish() {
                 if (POMODORO_COUNT <= 3) startPomodoro();
                 else {
-                    // TODO add some indication that session has ended, congratulate user
                     pomodoro_startButton.setVisibility(View.VISIBLE);
                     POMODORO_COUNT = 0;
                     POMODORO_RUNNING = false;
+                    player.release();
                     updateWidgets(0);
                 }
             }
@@ -98,7 +112,6 @@ public class TimerFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_timer, container, false);
         getElements(view);
-        mp = MediaPlayer.create(getContext(), R.raw.fanfare);
         return view;
     }
 

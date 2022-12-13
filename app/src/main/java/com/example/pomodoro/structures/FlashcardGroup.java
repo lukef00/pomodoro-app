@@ -1,5 +1,7 @@
 package com.example.pomodoro.structures;
 
+import java.io.IOException;
+
 public class FlashcardGroup {
     private String name;
     private int size;
@@ -15,13 +17,17 @@ public class FlashcardGroup {
 
     public void setName(String name) {
         this.name = name;
+        try {
+            Flashcard.getFlashcardsFromGroup(this.name).forEach(f -> {
+                f.setGroup(this.name);
+            });
+            Flashcard.serialize();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getSize() {
         return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
     }
 }

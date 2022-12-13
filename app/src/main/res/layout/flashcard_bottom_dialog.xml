@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/mcLL"
+        android:id="@+id/eFlashcard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -21,36 +21,14 @@
 
         <TextView
             android:id="@+id/task_status"
-            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/mark_task_label" />
+            android:layout_marginLeft="20dp"
+            android:text="@string/edit_flashcard_label" />
     </LinearLayout>
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/editLL"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="horizontal"-->
-<!--        android:padding="10dp">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView2"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            app:srcCompat="@drawable/ic_baseline_edit_24" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/textView5"-->
-<!--            android:layout_width="361dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            android:text="@string/edit_task_label" />-->
-<!--    </LinearLayout>-->
-
     <LinearLayout
-        android:id="@+id/removeLL"
+        android:id="@+id/fRemoveLL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -64,10 +42,10 @@
 
         <TextView
             android:id="@+id/textView7"
-            android:layout_marginLeft="20dp"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:text="@string/remove_task_label" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/remove_flashcard_label" />
 
     </LinearLayout>
 </LinearLayout>
